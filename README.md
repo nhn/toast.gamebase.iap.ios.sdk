@@ -26,6 +26,7 @@ use_frameworks!
 
 target '{YOUR PROJECT TARGET NAME}' do
 pod 'ToastGamebaseIAP'
+pod 'ToastOngate', '0.9.0'
 end
 ```
 
