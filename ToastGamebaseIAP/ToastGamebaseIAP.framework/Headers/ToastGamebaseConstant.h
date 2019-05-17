@@ -6,8 +6,7 @@
 //  Copyright © 2019 NHN. All rights reserved.
 //
 
-#ifndef ToastGamebaseConstant_h
-#define ToastGamebaseConstant_h
+#import <Foundation/Foundation.h>
 
 typedef NS_ENUM(NSUInteger, ToastGamebaseServiceZone) {
     ToastGamebaseServiceZoneReal    = 0,
@@ -33,20 +32,20 @@ typedef NS_ENUM(NSInteger, ToastGamebaseIAPErrorCode) {
     ToastGamebaseIAPErrorOngateCashInsufficient      = 60001,
 };
 
-static NSString *const ToastGamebaseStoreAppStore   = @"APPSTORE";
-static NSString *const ToastGamebaseStoreOngate     = @"ONGATE";
+//StoreCode
+extern NSString *const ToastGamebaseStoreAppStore;
+extern NSString *const ToastGamebaseStoreOngate;
 
-static NSString *const ToastGamebaseIAPErrorDomain = @"com.toast.iap.gamebase";
+//Error
+extern NSString *const ToastGamebaseIAPErrorDomain;
 
-static NSString *const kToastGamebaseIsStorePayment = @"isStorePayment";
-static NSString *const kToastGamebaseOriginalError  = @"originalError";
+//Key
+extern NSString *const kToastGamebaseIsStorePayment;
+extern NSString *const kToastGamebaseOriginalError;
 
+//NotificationName
+extern NSString *const ToastGamebaseDidReceivePurchaseResultNotification;
+extern NSString *const ToastGamebaseDidFailPurchaseProductNotification;
+extern NSString *const ToastGamebasePurchaseResultNotification;
 
-static NSString *const ToastGamebaseDidReceivePurchaseResultNotification = @"ToastGamebaseDidReceivePurchaseResult";
-static NSString *const ToastGamebaseDidFailPurchaseProductNotification = @"ToastGamebaseDidFailPurchaseProduct";
-
-static NSString *const ToastGamebasePurchaseResultNotification = @"ToastGamebasePurchaseResultNotification";
-
-
-#endif /* ToastGamebaseConstant_h */
 

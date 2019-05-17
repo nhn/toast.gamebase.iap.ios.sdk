@@ -65,7 +65,6 @@ NS_ASSUME_NONNULL_BEGIN
 + (void)processesIncompletePurchasesForStore:(NSString *)store
                        withCompletionHandler:(nullable void (^)(NSArray <ToastGamebasePurchaseResult *> * _Nullable results, NSError * _Nullable error))completionHandler;
 
-
 // Supprot Util
 + (void)consumeForStore:(NSString *)store
          purchaseResult:(ToastGamebasePurchaseResult *)result

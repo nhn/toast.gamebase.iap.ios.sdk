@@ -33,6 +33,9 @@ NS_ASSUME_NONNULL_BEGIN
 /** The sequence of product. */
 @property (nonatomic, assign) long productSeq;
 
+/** The identifier of product. */
+@property (nonatomic, strong) NSString *productIdentifier;
+
 /** The price of purchase. */
 @property (nonatomic, strong, nullable) NSDecimalNumber *price;
 
@@ -41,12 +44,14 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (instancetype)initWithPaymentSeq:(NSString *)paymentSeq
                      purchaseToken:(NSString *)purchaseToken
+                 productIdentifier:(NSString *)productIdentifier
                         productSeq:(NSNumber *)productSeq
                              price:(NSDecimalNumber *)price
                           currency:(NSString *)currency;
 
 + (instancetype)paymentSeq:(NSString *)paymentSeq
              purchaseToken:(NSString *)purchaseToken
+         productIdentifier:(NSString *)productIdentifier
                 productSeq:(NSNumber *)productSeq
                      price:(NSDecimalNumber *)price
                   currency:(NSString *)currency;

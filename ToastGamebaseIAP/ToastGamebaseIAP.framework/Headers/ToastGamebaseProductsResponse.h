@@ -13,6 +13,10 @@
 NS_ASSUME_NONNULL_BEGIN
 
 @interface ToastGamebaseProductsResponse : NSObject <NSCoding, NSCopying>
+{
+    NSArray<ToastGamebaseProduct *> *_products;
+    NSArray<ToastGamebaseProduct *> *_invalidProducts;
+}
 
 @property (nonatomic, readonly, copy) NSArray<ToastGamebaseProduct *> *products;
 @property (nonatomic, readonly, copy) NSArray<ToastGamebaseProduct *> *invalidProducts;

@@ -13,6 +13,22 @@
 NS_ASSUME_NONNULL_BEGIN
 
 @interface ToastGamebasePurchaseResult : NSObject <NSCoding, NSCopying>
+{
+    NSString *_store;
+    NSString *_productIdentifier;
+    ToastGamebaseProductType _productType;
+    NSDecimalNumber *_price;
+    NSString *_currency;
+    NSString *_paymentSeq;
+    NSString *_accessToken;
+    NSString *_userID;
+    BOOL _storePayment;    
+    NSTimeInterval _purchaseTime;
+    NSTimeInterval _expiryTime;
+    NSString *_transactionIdentifier;
+    NSString *_originalTransactionIdentifier;
+}
+
 
 @property (nonatomic, readonly, copy) NSString *store;
 @property (nonatomic, readonly, copy) NSString *productIdentifier;
@@ -23,7 +39,6 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, readonly, copy) NSString *accessToken;
 @property (nonatomic, readonly, copy) NSString *userID;
 @property (nonatomic, readonly, getter=isStorePayment) BOOL storePayment;
-@property (nonatomic, readonly) NSInteger productSeq;
 @property (nonatomic, readonly) NSTimeInterval purchaseTime;
 @property (nonatomic, readonly) NSTimeInterval expiryTime;
 @property (nonatomic, readonly, copy, nullable) NSString *transactionIdentifier;
