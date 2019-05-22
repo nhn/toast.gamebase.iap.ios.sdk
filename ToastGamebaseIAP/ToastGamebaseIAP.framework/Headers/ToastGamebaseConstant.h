@@ -43,9 +43,5 @@ extern NSString *const ToastGamebaseIAPErrorDomain;
 extern NSString *const kToastGamebaseIsStorePayment;
 extern NSString *const kToastGamebaseOriginalError;
 
-//NotificationName
-extern NSString *const ToastGamebaseDidReceivePurchaseResultNotification;
-extern NSString *const ToastGamebaseDidFailPurchaseProductNotification;
-extern NSString *const ToastGamebasePurchaseResultNotification;
 
 
