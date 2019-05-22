@@ -20,12 +20,19 @@
 
 @class ToastGamebasePurchaseResult;
 
+typedef void (^ToastGamebasePurchaseResultHandler)(NSString *_Nonnull store,
+                                                   BOOL isSuccess,
+                                                   ToastGamebasePurchaseResult *_Nullable purchase,
+                                                   NSString *_Nonnull productIdentifier,
+                                                   NSError* _Nullable error);
 
 @protocol ToastGamebaseInAppPurchaseDelegate <NSObject>
 
-- (void)didReceivePurchaseResult:(ToastGamebasePurchaseResult *_Nonnull)purchase forStore:(NSString *_Nonnull)store;
-- (void)didFailPurchaseProduct:(NSString *_Nonnull)productIdentifier forStore:(NSString *_Nonnull)store error:(NSError *_Nonnull)error;
-
+- (void)didReceivePurchaseResultForStore:(NSString *_Nonnull)store
+                               isSuccess:(BOOL)isSuccess
+                                purchase:(ToastGamebasePurchaseResult *_Nullable)purchase
+                       productIdentifier:(NSString * _Nonnull)productIdentifier
+                                   error:(NSError *_Nullable)error;
 @end
 
 NS_ASSUME_NONNULL_BEGIN
@@ -48,10 +55,12 @@ NS_ASSUME_NONNULL_BEGIN
                      withCompletionHandler:(nullable void (^)(NSArray<ToastGamebasePurchaseResult *> * _Nullable purchases, NSError * _Nullable error))completionHandler;
 
 + (void)purchaseForStore:(NSString *)store
-             withProduct:(ToastGamebaseProduct *)product;
+                 product:(ToastGamebaseProduct *)product
+   withCompletionHandler:(ToastGamebasePurchaseResultHandler)completionHandler;
 
 + (void)purchaseForStore:(NSString *)store
-   withProductIdentifier:(NSString *)productIdentifier;
+       productIdentifier:(NSString *)productIdentifier
+   withCompletionHandler:(ToastGamebasePurchaseResultHandler)completionHandler;
 
 
 //ToastIAP only
@@ -76,14 +85,3 @@ NS_ASSUME_NONNULL_BEGIN
 @end
 
 NS_ASSUME_NONNULL_END
-
-/*
- 
- //Ongate
- + (void)consumeWithPurchaseResult:(ToastOngatePurchaseResult *)result
- completionHandler:(nullable void (^)(NSError * _Nullable error))completionHandler;
- 
- //AppStore
- + (void)consumeWithPurchaseResult:(ToastGamebasePurchaseResult *)result
- completionHandler:(nullable void (^)(NSError * _Nullable error))completionHandler;
- */

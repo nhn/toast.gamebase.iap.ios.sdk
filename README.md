@@ -25,7 +25,8 @@ platform :ios, '8.0'
 use_frameworks!
 
 target '{YOUR PROJECT TARGET NAME}' do
-pod 'ToastGamebaseIAP'
+pod 'ToastGamebaseIAP', '0.9.1'
+pod 'ToastOngate', '0.9.0'
 end
 ```
 
@@ -142,8 +143,11 @@ ToastGamebaseIAPConfiguration *configuration = [ToastGamebaseIAPConfiguration co
 ``` objc
 @protocol ToastGamebaseInAppPurchaseDelegate <NSObject>
 
-- (void)didReceivePurchaseResult:(ToastGamebasePurchaseResult *_Nonnull)purchase forStore:(NSString *_Nonnull)store;
-- (void)didFailPurchaseProduct:(NSString *_Nonnull)productIdentifier forStore:(NSString *_Nonnull)store error:(NSError *_Nonnull)error;
+- (void)didReceivePurchaseResultForStore:(NSString *_Nonnull)store
+                               isSuccess:(BOOL)isSuccess
+                                purchase:(ToastGamebasePurchaseResult *_Nullable)purchase
+                       productIdentifier:(NSString * _Nonnull)productIdentifier
+                                   error:(NSError *_Nullable)error;
 
 @end
 ```
@@ -151,94 +155,21 @@ ToastGamebaseIAPConfiguration *configuration = [ToastGamebaseIAPConfiguration co
 ##### API 사용 예
 
 ``` objc
-- (void)didFailPurchaseProduct:(NSString *)productIdentifier forStore:(NSString *)store error:(NSError *)error {
 
-    NSLog(@"didFailPurchaseProduct : %@", productIdentifier);
-    NSLog(@"didFailPurchaseProduct : %@", error);
+- (void)didReceivePurchaseResultForStore:(NSString *)store
+                               isSuccess:(BOOL)isSuccess
+                                purchase:(ToastGamebasePurchaseResult *)purchase
+                       productIdentifier:(NSString *)productIdentifier
+                                   error:(NSError *)error {
 
-}
-
-- (void)didReceivePurchaseResult:(ToastGamebasePurchaseResult *)purchase forStore:(NSString *)store {
-
-    NSLog(@"didReceivePurchaseResult : %@", purchase);
-    NSLog(@"didReceivePurchaseResult : %@", store);
-}
-```
-
-#### Observer
-
-* SDK를 통해 요청한 결제는 등록된 Observer로 결과가 전달 됩니다.
-
-##### API 명세
-
-``` objc
-// 요청한 결제의 성공 결과만을 받기 원할 경우 
-static NSString *const ToastGamebaseDidReceivePurchaseResultNotification = @"ToastGamebaseDidReceivePurchaseResult";
-
-// 요청한 결제의 실패 결과만을 받기 원할 경우 
-static NSString *const ToastGamebaseDidFailPurchaseProductNotification = @"ToastGamebaseDidFailPurchaseProduct";
-
-// 요청한 결제의 성공, 실패 결과를 함께 받기 원할 경우 
-static NSString *const ToastGamebasePurchaseResultNotification = @"ToastGamebasePurchaseResultNotification";
-```
-
-##### API 사용 예
-
-```objc
-//...
-[[NSNotificationCenter defaultCenter] addObserver:instance
-                                         selector:@selector(success:)
-                                             name:ToastGamebaseDidReceivePurchaseResultNotification
-                                           object:nil];
-
-[[NSNotificationCenter defaultCenter] addObserver:instance
-                                         selector:@selector(fail:)
-                                             name:ToastGamebaseDidFailPurchaseProductNotification
-                                           object:nil];
-
-[[NSNotificationCenter defaultCenter] addObserver:instance
-                                         selector:@selector(result:)
-                                             name:ToastGamebasePurchaseResultNotification
-                                           object:nil];
-//...
-
-
-- (void)success:(NSNotification *)notification {
-    NSDictionary *result = [[notification userInfo] copy];
-
-    NSString *store = [result objectForKey:@"Store"];
-    ToastGamebasePurchaseResult * purchase = [result objectForKey:@"ToastGamebasePurchaseResult"];
-
-    NSLog(@"[success Notification] ToastGamebasePurchaseResult : %@", purchase);
-    NSLog(@"[success Notification] Store : %@", store);
-}
-
-- (void)fail:(NSNotification *)notification {
-    NSDictionary *result = [[notification userInfo] copy];
-
-    NSString *store = [result objectForKey:@"Store"];
-    NSError * error = [result objectForKey:@"Error"];
-    NSString *productIdentifier = [result objectForKey:@"ProductIdentifier"];
-
-    NSLog(@"[fail Notification] ProductIdentifier : %@", productIdentifier);
-    NSLog(@"[fail Notification] Store : %@", store);
-    NSLog(@"[fail Notification] Error : %@", error);
-}
-
-- (void)result:(NSNotification *)notification {
-    NSDictionary *result = [[notification userInfo] copy];
-
-    BOOL success = [[result objectForKey:@"Success"] boolValue];
-    ToastGamebasePurchaseResult *purchase = [result objectForKey:@"ToastGamebasePurchaseResult"];
-    NSString *productIdentifier = [result objectForKey:@"ProductIdentifier"];
-    NSString *store = [result objectForKey:@"Store"];
-    NSError *error = [result objectForKey:@"Error"];
-
-    NSLog(@"[result Notification] Success : %@", success ? @"YES" : @"NO");
-    NSLog(@"[result Notification] ToastGamebasePurchaseResult : %@", purchase);
-    NSLog(@"[result Notification] ProductIdentifier : %@", productIdentifier);
-    NSLog(@"[result Notification] Store : %@", store);
-    NSLog(@"[result Notification] Error : %@", error);
+    if (isSuccess) {
+        NSLog(@"Success Store : %@", store);
+        NSLog(@"Success PurchaseResult : %@", purchase);
+    }else {
+        NSLog(@"Fail Store : %@", store);
+        NSLog(@"Fail ProductIdentifier : %@", productIdentifier);
+        NSLog(@"Fail Error : %@", error);
+    }
 }
 ```
 
@@ -261,7 +192,7 @@ static NSString *const ToastGamebaseStoreOngate     = @"ONGATE";
 ##### API 사용 예
 
 ``` objc
-[ToastGamebaseIAP requestProductsForStore:self.storeType
+[ToastGamebaseIAP requestProductsForStore:self.store
                     withCompletionHandler:^(ToastGamebaseProductsResponse * _Nullable response, NSError * _Nullable error) {
 
     if(error == nil) {    
@@ -300,11 +231,14 @@ typedef NS_ENUM(NSInteger, ToastGamebaseProductType) {
 ##### API 명세
 
 ``` objc
+typedef void (^ToastGamebasePurchaseResultHandler)(NSString *_Nonnull store,
+                                                   BOOL isSuccess,
+                                                   ToastGamebasePurchaseResult *_Nullable purchase,
+                                                   NSString *_Nonnull productIdentifier,
+                                                   NSError* _Nullable error);
 + (void)purchaseForStore:(NSString *)store
-             withProduct:(ToastGamebaseProduct *)product;
-
-+ (void)purchaseForStore:(NSString *)store
-   withProductIdentifier:(NSString *)productIdentifier;
+                 product:(ToastGamebaseProduct *)product
+   withCompletionHandler:(ToastGamebasePurchaseResultHandler)completionHandler;
 ```
 
 ##### API 사용 예
@@ -313,7 +247,7 @@ typedef NS_ENUM(NSInteger, ToastGamebaseProductType) {
 @property (nonatomic) NSArray <ToastProduct *> *products;
 
 // 상품 목록 조회
-[ToastGamebaseIAP requestProductsForStore:self.storeType
+[ToastGamebaseIAP requestProductsForStore:self.store
                     withCompletionHandler:^(ToastGamebaseProductsResponse * _Nullable response, NSError * _Nullable error) {
 
     if (error == nil) {
@@ -328,7 +262,15 @@ typedef NS_ENUM(NSInteger, ToastGamebaseProductType) {
 
 
 // 상품 구매 요청
-[ToastGamebaseIAP purchaseForStore:self.storeType withProduct:[self.products objectAtIndex:0]];
+[ToastGamebaseIAP purchaseForStore:self.store
+                           product:[self.products objectAtIndex:0]
+             withCompletionHandler:^(NSString* store, BOOL isSuccess, ToastGamebasePurchaseResult * _Nullable purchase, NSError * _Nullable error) {
+             
+     NSLog(@"[result Callback] Store : %@", store);
+     NSLog(@"[result Callback] Success : %@", isSuccess ? @"YES" : @"NO");
+     NSLog(@"[result Callback] ToastGamebasePurchaseResult : %@", purchase);
+     NSLog(@"[result Callback] Error : %@", error);
+}];
 
 ```
 
@@ -340,13 +282,33 @@ typedef NS_ENUM(NSInteger, ToastGamebaseProductType) {
 ##### API 명세
 
 ``` objc
-+ (void)purchaseWithProductIdentifier:(NSString *)productIdentifier;
+
+typedef void (^ToastGamebasePurchaseResultHandler)(NSString *_Nonnull store,
+                                                   BOOL isSuccess,
+                                                   ToastGamebasePurchaseResult *_Nullable purchase,
+                                                   NSString *_Nonnull productIdentifier,
+                                                   NSError* _Nullable error);
+
++ (void)purchaseForStore:(NSString *)store
+       productIdentifier:(NSString *)productIdentifier
+   withCompletionHandler:(ToastGamebasePurchaseResultHandler)completionHandler;
 ```
 
 ##### API 사용 예
 
 ``` objc
-[ToastGamebaseIAP purchaseForStore:self.storeType withProductIdentifier:PRODUCT_IDENTIFIER];
+
+[ToastGamebaseIAP purchaseForStore:self.store
+                 productIdentifier:PRODUCT_IDENTIFIER
+             withCompletionHandler:^(NSString* store, BOOL isSuccess, ToastGamebasePurchaseResult * _Nullable purchase, NSError * _Nullable error) {
+
+    NSLog(@"[result Callback] Store : %@", store);
+    NSLog(@"[result Callback] Success : %@", isSuccess ? @"YES" : @"NO");
+    NSLog(@"[result Callback] ToastGamebasePurchaseResult : %@", purchase);
+    NSLog(@"[result Callback] Error : %@", error);
+
+}];
+
 ```
 
 ### 활성화된 구매 목록 조회
@@ -366,7 +328,7 @@ typedef NS_ENUM(NSInteger, ToastGamebaseProductType) {
 ##### API 사용 예
 
 ``` objc
-[ToastGamebaseIAP requestActivePurchasesForStore:self.storeType 
+[ToastGamebaseIAP requestActivePurchasesForStore:self.store
                            withCompletionHandler:^(NSArray<ToastGamebasePurchaseResult *> * _Nullable purchases, NSError * _Nullable error) {
 
     if(error == nil) {
@@ -393,7 +355,7 @@ typedef NS_ENUM(NSInteger, ToastGamebaseProductType) {
 ##### API 사용 예
 
 ``` objc
-ToastGamebaseIAP restoreForStore:self.storeType
+ToastGamebaseIAP restoreForStore:self.store
            withCompletionHandler:^(NSArray<ToastGamebasePurchaseResult *> * _Nullable purchases, NSError * _Nullable error) {
 
     if(error == nil) {
@@ -420,7 +382,7 @@ ToastGamebaseIAP restoreForStore:self.storeType
 ##### API 사용 예
 
 ``` objc
-[ToastGamebaseIAP requestConsumablePurchasesForStore:self.storeType 
+[ToastGamebaseIAP requestConsumablePurchasesForStore:self.store
                                withCompletionHandler:^(NSArray<ToastGamebasePurchaseResult *> * _Nullable purchases, NSError * _Nullable error) {
 
     if (error == nil) {
@@ -444,14 +406,14 @@ ToastGamebaseIAP restoreForStore:self.storeType
 ##### API 사용 예
 
 ``` objc
-[ToastGamebaseIAP requestConsumablePurchasesForStore:self.storeType
+[ToastGamebaseIAP requestConsumablePurchasesForStore:self.store
                                withCompletionHandler:^(NSArray<ToastGamebasePurchaseResult *> * _Nullable purchases, NSError * _Nullable error) {
 
     for (int i=0; i<purchases.count; i++) {
 
         ToastGamebasePurchaseResult *result = [purchases objectAtIndex:i];
 
-        [ToastGamebaseIAP consumeForStore:self.storeType
+        [ToastGamebaseIAP consumeForStore:self.store
                            purchaseResult:result
                     withCompletionHandler:^(NSError * _Nullable error) {
                     
