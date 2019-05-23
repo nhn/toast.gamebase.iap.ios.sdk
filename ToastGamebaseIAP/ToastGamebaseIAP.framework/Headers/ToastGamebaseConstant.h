@@ -39,9 +39,12 @@ extern NSString *const ToastGamebaseStoreOngate;
 //Error
 extern NSString *const ToastGamebaseIAPErrorDomain;
 
-//Key
+//Error Key
 extern NSString *const kToastGamebaseIsStorePayment;
-extern NSString *const kToastGamebaseOriginalError;
+extern NSString *const kToastGamebaseCauseError;
 
+//Configuration Key
+extern NSString *const kToastProviderAppID;
+extern NSString *const kToastProviderUserID;
 
 

@@ -62,7 +62,6 @@ NS_ASSUME_NONNULL_BEGIN
        productIdentifier:(NSString *)productIdentifier
    withCompletionHandler:(ToastGamebasePurchaseResultHandler)completionHandler;
 
-
 //ToastIAP only
 + (void)restoreForStore:(NSString *)store
   withCompletionHandler:(nullable void (^)(NSArray<ToastGamebasePurchaseResult *> * _Nullable purchases, NSError * _Nullable error))completionHandler;

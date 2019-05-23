@@ -25,7 +25,7 @@ platform :ios, '8.0'
 use_frameworks!
 
 target '{YOUR PROJECT TARGET NAME}' do
-pod 'ToastGamebaseIAP', '0.9.1'
+pod 'ToastGamebaseIAP', '0.9.2'
 pod 'ToastOngate', '0.9.0'
 end
 ```
@@ -44,11 +44,32 @@ end
 
 ``` objc
 #import <ToastGamebaseIAP/ToastGamebaseIAP.h>
+#import <ToastCore/ToastCore.h>
 #import <ToastIAP/ToastIAP.h>
 #import <ToastOngate/ToastOngate.h>
 ```
 
 ## API 사용 가이드
+
+## 서비스 로그인
+
+* TOAST SDK에서 제공하는 모든 상품(IAP, Log & Crash, Push등)은 같은 사용자 ID 하나만 사용합니다.
+
+### 로그인
+
+`사용자 ID가 설정되지 않은 상태에서는 구매, 활성화된 상품 조회, 미소비 내역 조회 기능을 사용할 수 없습니다.`
+
+``` objc
+// 서비스 로그인 완료 후 사용자 ID 설정
+[ToastSDK setUserID:@"INPUT_USER_ID"];
+```
+
+### 로그아웃
+
+``` objc
+// 서비스 로그아웃 완료 후 사용자 ID를 nil로 설정
+[ToastSDK setUserID:nil];
+```
 
 ### 초기화
 
@@ -56,31 +77,22 @@ end
 
 * ToastGamebaseIAP는 Configuration을 사용하여 초기화 할 수 있습니다.
 
+* 초기화 이후에 동작하는 미완료 결제의 재처리와 프로모션 상품의 구입을 위해 초기화 이전에 UserID 설정이 필요합니다. 
+
 ##### API 명세
 
 ``` objc
+
 @interface ToastGamebaseIAPConfiguration : NSObject <NSCoding, NSCopying>
 
-//ToastOngate
-@property (nonatomic, copy) NSString *ongateAppID;
-@property (nonatomic, copy) NSString *ongateUserID;
-@property (nonatomic) NSInteger ongateServiceZone;
-
-//ToastIAP
-@property (nonatomic, copy) NSString *userID;
-@property (nonatomic, copy) NSString *appKey;
-@property (nonatomic) NSInteger serviceZone;
+@property (nonatomic, copy, readonly) NSString *appKey;
+@property (nonatomic, readonly) ToastGamebaseServiceZone serviceZone;
+@property (nonatomic, copy, readonly, nullable) NSDictionary<NSString *, NSDictionary *> *extras;
 
 + (instancetype)configurationWithAppKey:(NSString *)appKey
-                                 userID:(NSString *)userID
-                            serviceZone:(ToastGamebaseServiceZone)serviceZone
-                            ongateAppID:(NSString *)ongateAppID
-                           ongateUserID:(NSString *)ongateUserID
-                      ongateServiceZone:(ToastGamebaseServiceZone)ongateServiceZone;
+serviceZone:(ToastGamebaseServiceZone)serviceZone;
 
-+ (instancetype)configurationWithAppKey:(NSString *)appKey
-                                 userID:(NSString *)userID
-                            serviceZone:(ToastGamebaseServiceZone)serviceZone;
+- (void)addExtraObject:(NSDictionary *)object forStore:(NSString *)store;
 
 @end
 ```
@@ -88,18 +100,17 @@ end
 ##### API 사용 예
 
 ``` objc
-// Ongate와 함께 사용할 경우 
-ToastGamebaseIAPConfiguration *configuration = [ToastGamebaseIAPConfiguration configurationWithAppKey:appKey
-                                                                                               userID:userID
-                                                                                          serviceZone:ToastGamebaseServiceZoneReal
-                                                                                          ongateAppID:ongateAppID
-                                                                                         ongateUserID:ongateUserID
-                                                                                    ongateServiceZone:ToastGamebaseServiceZoneReal];
 
-// ToastIAP 만 사용할 경우 
 ToastGamebaseIAPConfiguration *configuration = [ToastGamebaseIAPConfiguration configurationWithAppKey:appKey
-                                                                                               userID:userID
                                                                                           serviceZone:ToastGamebaseServiceZoneReal];
+
+
+NSMutableDictionary *ongateExtras = [[NSMutableDictionary alloc]init];
+[ongateExtras setObject:ongateAppID  forKey:kToastProviderAppID];
+[ongateExtras setObject:ongateUserID forKey:kToastProviderUserID];
+
+[configuration addExtraObject:ongateExtras forStore:ToastGamebaseStoreOngate];
+
 ```
 
 #### Init
@@ -181,8 +192,8 @@ ToastGamebaseIAPConfiguration *configuration = [ToastGamebaseIAPConfiguration co
 ##### API 명세
 
 ``` objc
-static NSString *const ToastGamebaseStoreAppStore   = @"APPSTORE";
-static NSString *const ToastGamebaseStoreOngate     = @"ONGATE";
+extern NSString *const ToastGamebaseStoreAppStore;
+extern NSString *const ToastGamebaseStoreOngate;
 
 
 + (void)requestProductsForStore:(NSString *)store
