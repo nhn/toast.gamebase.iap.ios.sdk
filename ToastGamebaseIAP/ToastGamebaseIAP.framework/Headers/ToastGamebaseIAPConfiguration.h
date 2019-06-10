@@ -13,14 +13,10 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface ToastGamebaseIAPConfiguration : NSObject <NSCoding, NSCopying>
 
-@property (nonatomic, copy, readonly) NSString *appKey;
-@property (nonatomic, readonly) ToastGamebaseServiceZone serviceZone;
-@property (nonatomic, copy, readonly, nullable) NSDictionary<NSString *, NSDictionary *> *extras;
-
 + (instancetype)configurationWithAppKey:(NSString *)appKey
                             serviceZone:(ToastGamebaseServiceZone)serviceZone;
 
-- (void)addExtraObject:(NSDictionary *)object forStore:(NSString *)store;
+- (void)setExtraObject:(NSDictionary *)object forStore:(NSString *)store;
 
 @end
 

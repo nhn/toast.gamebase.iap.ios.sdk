@@ -25,8 +25,9 @@ platform :ios, '8.0'
 use_frameworks!
 
 target '{YOUR PROJECT TARGET NAME}' do
-pod 'ToastGamebaseIAP', '0.9.2'
-pod 'ToastOngate', '0.9.0'
+pod 'ToastGamebaseIAP', '0.9.3'
+pod 'ToastIAP', '0.14.2'
+pod 'ToastOngate', '0.9.1'
 end
 ```
 
@@ -85,14 +86,10 @@ end
 
 @interface ToastGamebaseIAPConfiguration : NSObject <NSCoding, NSCopying>
 
-@property (nonatomic, copy, readonly) NSString *appKey;
-@property (nonatomic, readonly) ToastGamebaseServiceZone serviceZone;
-@property (nonatomic, copy, readonly, nullable) NSDictionary<NSString *, NSDictionary *> *extras;
-
 + (instancetype)configurationWithAppKey:(NSString *)appKey
-serviceZone:(ToastGamebaseServiceZone)serviceZone;
+                            serviceZone:(ToastGamebaseServiceZone)serviceZone;
 
-- (void)addExtraObject:(NSDictionary *)object forStore:(NSString *)store;
+- (void)setExtraObject:(NSDictionary *)object forStore:(NSString *)store;
 
 @end
 ```
@@ -109,7 +106,7 @@ NSMutableDictionary *ongateExtras = [[NSMutableDictionary alloc]init];
 [ongateExtras setObject:ongateAppID  forKey:kToastProviderAppID];
 [ongateExtras setObject:ongateUserID forKey:kToastProviderUserID];
 
-[configuration addExtraObject:ongateExtras forStore:ToastGamebaseStoreOngate];
+[configuration setExtraObject:ongateExtras forStore:ToastGamebaseStoreOngate];
 
 ```
 

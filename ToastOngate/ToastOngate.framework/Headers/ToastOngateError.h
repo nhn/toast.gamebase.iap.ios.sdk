@@ -10,6 +10,7 @@
 #define ToastOngateError_h
 
 static NSString *const ToastOngateErrorDomain       = @"com.toast.ongate";
+static NSString *const ToastOngateMobillErrorDomain = @"com.toast.ongate.mobill";
 
 typedef NS_ENUM(NSUInteger, ToastOngateErrorCode) {
     // Client Error (4xxxx)
