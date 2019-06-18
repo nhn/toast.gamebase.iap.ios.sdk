@@ -14,11 +14,10 @@ typedef NS_ENUM(NSUInteger, ToastGamebaseServiceZone) {
     ToastGamebaseServiceZoneBeta    = 2,
 };
 
-typedef NS_ENUM(NSInteger, ToastGamebaseProductType) {
-    ToastGamebaseProductTypeUnknown                     = 0,
-    ToastGamebaseProductTypeConsumable                  = 1,
-    ToastGamebaseProductTypeAutoRenewableSubscription   = 2,
-};
+typedef NSString *ToastGamebaseProductType NS_STRING_ENUM;
+extern ToastGamebaseProductType const ToastGamebaseProductTypeUnknown;
+extern ToastGamebaseProductType const ToastGamebaseProductTypeConsumable;
+extern ToastGamebaseProductType const ToastGamebaseProductTypeAutoRenewableSubscription;
 
 typedef NS_ENUM(NSInteger, ToastGamebaseIAPErrorCode) {
     
