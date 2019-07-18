@@ -9,7 +9,7 @@
 #import <UIKit/UIKit.h>
 #import "ToastGamebaseIAP+SDK.h"
 #import "ToastGamebaseIAPConfiguration.h"
-#import "ToastGamebasePurchaseResult.h"
+#import "ToastGamebasePurchase.h"
 #import "ToastGamebaseProduct.h"
 #import "ToastGamebaseConstant.h"
 #import "ToastGamebaseProductsResponse.h"

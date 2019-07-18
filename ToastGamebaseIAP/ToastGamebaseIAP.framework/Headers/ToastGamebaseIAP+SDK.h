@@ -18,20 +18,20 @@
 #import "ToastGamebaseProductsResponse.h"
 
 
-@class ToastGamebasePurchaseResult;
+@class ToastGamebasePurchase;
 
-typedef void (^ToastGamebasePurchaseResultHandler)(NSString *_Nonnull store,
+typedef void (^ToastGamebasePurchaseHandler)(NSString *_Nonnull store,
                                                    BOOL isSuccess,
-                                                   ToastGamebasePurchaseResult *_Nullable purchase,
-                                                   NSString *_Nonnull productIdentifier,
+                                                   ToastGamebasePurchase *_Nullable purchase,
+                                                   NSString *_Nonnull productID,
                                                    NSError* _Nullable error);
 
 @protocol ToastGamebaseInAppPurchaseDelegate <NSObject>
 
 - (void)didReceivePurchaseResultForStore:(NSString *_Nonnull)store
                                isSuccess:(BOOL)isSuccess
-                                purchase:(ToastGamebasePurchaseResult *_Nullable)purchase
-                       productIdentifier:(NSString * _Nonnull)productIdentifier
+                                purchase:(ToastGamebasePurchase *_Nullable)purchase
+                               productID:(NSString * _Nonnull)productID
                                    error:(NSError *_Nullable)error;
 @end
 
@@ -52,30 +52,30 @@ NS_ASSUME_NONNULL_BEGIN
           withCompletionHandler:(nullable void (^)(ToastGamebaseProductsResponse * _Nullable response, NSError * _Nullable error))completionHandler;
 
 + (void)requestConsumablePurchasesForStore:(NSString *)store
-                     withCompletionHandler:(nullable void (^)(NSArray<ToastGamebasePurchaseResult *> * _Nullable purchases, NSError * _Nullable error))completionHandler;
+                     withCompletionHandler:(nullable void (^)(NSArray<ToastGamebasePurchase *> * _Nullable purchases, NSError * _Nullable error))completionHandler;
 
 + (void)purchaseForStore:(NSString *)store
                  product:(ToastGamebaseProduct *)product
-   withCompletionHandler:(ToastGamebasePurchaseResultHandler)completionHandler;
+   withCompletionHandler:(ToastGamebasePurchaseHandler)completionHandler;
 
 + (void)purchaseForStore:(NSString *)store
-       productIdentifier:(NSString *)productIdentifier
-   withCompletionHandler:(ToastGamebasePurchaseResultHandler)completionHandler;
+               productID:(NSString *)productID
+   withCompletionHandler:(ToastGamebasePurchaseHandler)completionHandler;
 
 //ToastIAP only
 + (void)restoreForStore:(NSString *)store
-  withCompletionHandler:(nullable void (^)(NSArray<ToastGamebasePurchaseResult *> * _Nullable purchases, NSError * _Nullable error))completionHandler;
+  withCompletionHandler:(nullable void (^)(NSArray<ToastGamebasePurchase *> * _Nullable purchases, NSError * _Nullable error))completionHandler;
 
-+ (void)requestActivePurchasesForStore:(NSString *)store
-                 withCompletionHandler:(nullable void (^)(NSArray<ToastGamebasePurchaseResult *> * _Nullable purchases, NSError * _Nullable error))completionHandler;
++ (void)requestActivatedPurchasesForStore:(NSString *)store
+                    withCompletionHandler:(nullable void (^)(NSArray<ToastGamebasePurchase *> * _Nullable purchases, NSError * _Nullable error))completionHandler;
 
 //ToastIAP only && TCIAPurchase Migration
 + (void)processesIncompletePurchasesForStore:(NSString *)store
-                       withCompletionHandler:(nullable void (^)(NSArray <ToastGamebasePurchaseResult *> * _Nullable results, NSError * _Nullable error))completionHandler;
+                       withCompletionHandler:(nullable void (^)(NSArray <ToastGamebasePurchase *> * _Nullable results, NSError * _Nullable error))completionHandler;
 
 // Supprot Util
 + (void)consumeForStore:(NSString *)store
-         purchaseResult:(ToastGamebasePurchaseResult *)result
+               purchase:(ToastGamebasePurchase *)purchase
   withCompletionHandler:(nullable void (^)(NSError * _Nullable error))completionHandler;
 
 + (void)setDebugMode:(BOOL)debugMode;
