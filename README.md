@@ -3,7 +3,7 @@
 ## ToastGamebaseIAP의 구성
 
 * ToastGamebaseIAP
-    * [ToastIAP] ToastIAP.framework (0.14.2 ~) `필수`
+    * [ToastIAP] ToastIAP.framework (0.17.0 ~) `필수`
         * [ToastCore] ToastCore.framework
             * [ToastCommon] ToastCommon.framework
     * [ToastOngate] ToastOngate.framework (0.9.2 ~) `선택`
@@ -25,7 +25,7 @@ platform :ios, '8.0'
 use_frameworks!
 
 target '{YOUR PROJECT TARGET NAME}' do
-pod 'ToastGamebaseIAP', '0.9.5'
+pod 'ToastGamebaseIAP', '0.9.6'
 pod 'ToastIAP'
 pod 'ToastOngate'
 end
@@ -220,11 +220,11 @@ extern NSString *const ToastGamebaseStoreOngate;
 * Ongate의 경우 소비성 상품만 지원합니다.
 
 ``` objc
-typedef NS_ENUM(NSInteger, ToastGamebaseProductType) {
-    ToastGamebaseProductTypeUnknown                     = 0,
-    ToastGamebaseProductTypeConsumable                  = 1,
-    ToastGamebaseProductTypeAutoRenewableSubscription   = 2,
-};
+typedef NSString *ToastGamebaseProductType NS_STRING_ENUM;
+extern ToastGamebaseProductType const ToastGamebaseProductTypeUnknown;
+extern ToastGamebaseProductType const ToastGamebaseProductTypeConsumable;
+extern ToastGamebaseProductType const ToastGamebaseProductTypeAutoRenewableSubscription;
+extern ToastGamebaseProductType const ToastGamebaseProductTypeConsumableSubscription;
 ```
 
 ### 상품 구매
@@ -319,11 +319,12 @@ typedef void (^ToastGamebasePurchaseResultHandler)(NSString *_Nonnull store,
 
 ```
 
-### 활성화된 구매 목록 조회
+### 활성화된 구독 목록 조회
 
 > ToastIAP(AppStore)에서만 지원하는 기능입니다.
 
-* 현재 사용자 ID에 활성화된 구매(만료되지 않고 구독 중인 구독 상품) 목록을 조회합니다.
+* 현재 사용자 ID 기준으로 활성화된 구독 목록을 조회합니다.
+* 결제가 완료된 구독 상품(자동 갱신형 구독, 자동 갱신형 소비성 구독 상품)은 만료되기 전까지 계속 조회할 수 있습니다. 
 * 사용자 ID가 같다면 Android에서 구매한 구독 상품도 조회됩니다.
 
 ##### API 명세
@@ -351,7 +352,10 @@ typedef void (^ToastGamebasePurchaseResultHandler)(NSString *_Nonnull store,
 
 > ToastIAP(AppStore)에서만 지원하는 기능입니다.
 
-* 현재 사용자 ID에서 구매된 항목 중 복원 가능한 구매 목록을 조회합니다.
+* 사용자의 AppStore 계정으로 구매한 내역을 기준으로 구매 내역을 복원하여 IAP 콘솔에 반영합니다. 
+* 구매한 구독 상품이 조회되지 않거나 활성화 되지 않을 경우 사용합니다.
+* 구매 복원이 완료된 후에 활성화된 구독 목록을 반환합니다. 
+* 자동 갱신형 소비성 구독 상품의 경우 반영되지 않은 구매 내역이 존재할 경우 복원 후 미소비 구매 내역에서 조회 가능합니다.
 
 ##### API 명세
 
@@ -379,7 +383,7 @@ ToastGamebaseIAP restoreForStore:self.store
 
 * 소비성 상품의 경우 상품 지급 후에 소비(consume) 처리를 해야 합니다.
 * 소비 처리되지 않은 구매 내역을 조회합니다.
-
+* 자동 갱신형 소비성 구독 상품은 갱신 결제가 발생할 때마다 미소비 구매 내역에서 조회 가능합니다.
 ##### API 명세
 
 ``` objc

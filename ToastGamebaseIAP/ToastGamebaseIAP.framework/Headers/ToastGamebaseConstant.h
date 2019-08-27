@@ -18,6 +18,7 @@ typedef NSString *ToastGamebaseProductType NS_STRING_ENUM;
 extern ToastGamebaseProductType const ToastGamebaseProductTypeUnknown;
 extern ToastGamebaseProductType const ToastGamebaseProductTypeConsumable;
 extern ToastGamebaseProductType const ToastGamebaseProductTypeAutoRenewableSubscription;
+extern ToastGamebaseProductType const ToastGamebaseProductTypeConsumableSubscription;
 
 typedef NS_ENUM(NSInteger, ToastGamebaseIAPErrorCode) {
     
