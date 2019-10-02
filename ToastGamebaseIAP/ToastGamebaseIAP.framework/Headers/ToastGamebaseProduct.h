@@ -14,7 +14,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface ToastGamebaseProduct : NSObject <NSCoding, NSCopying>
 {
-    NSString *_store;
+    NSString *_storeCode;
     ToastGamebaseProductType _productType;
     NSString *_productID;
     NSInteger _productSeq;
@@ -25,7 +25,7 @@ NS_ASSUME_NONNULL_BEGIN
     BOOL _active;
 }
 
-@property (nonatomic, readonly, copy) NSString *store;
+@property (nonatomic, readonly, copy) NSString *storeCode;
 @property (nonatomic, readonly) ToastGamebaseProductType productType;
 @property (nonatomic, readonly, copy) NSString *productID;
 @property (nonatomic, readonly) NSInteger productSeq;

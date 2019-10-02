@@ -20,15 +20,15 @@
 
 @class ToastGamebasePurchase;
 
-typedef void (^ToastGamebasePurchaseHandler)(NSString *_Nonnull store,
-                                                   BOOL isSuccess,
-                                                   ToastGamebasePurchase *_Nullable purchase,
-                                                   NSString *_Nonnull productID,
-                                                   NSError* _Nullable error);
+typedef void (^ToastGamebasePurchaseHandler)(ToastGamebaseStoreCode _Nonnull store,
+                                             BOOL isSuccess,
+                                             ToastGamebasePurchase *_Nullable purchase,
+                                             NSString *_Nonnull productID,
+                                             NSError* _Nullable error);
 
 @protocol ToastGamebaseInAppPurchaseDelegate <NSObject>
 
-- (void)didReceivePurchaseResultForStore:(NSString *_Nonnull)store
+- (void)didReceivePurchaseResultForStore:(ToastGamebaseStoreCode _Nonnull)store
                                isSuccess:(BOOL)isSuccess
                                 purchase:(ToastGamebasePurchase *_Nullable)purchase
                                productID:(NSString * _Nonnull)productID
@@ -39,6 +39,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface ToastGamebaseIAP : NSObject
 
+#pragma mark - initialize
 + (void)setDelegate:(id<ToastGamebaseInAppPurchaseDelegate>)delegate;
 
 + (void)initWithConfiguration:(ToastGamebaseIAPConfiguration *)configuration;
@@ -46,35 +47,61 @@ NS_ASSUME_NONNULL_BEGIN
 + (void)initWithConfiguration:(ToastGamebaseIAPConfiguration *)configuration
                      delegate:(id<ToastGamebaseInAppPurchaseDelegate>)delegate;
 
-
-
-+ (void)requestProductsForStore:(NSString *)store
+#pragma mark - products
++ (void)requestProductsForStore:(ToastGamebaseStoreCode)store
           withCompletionHandler:(nullable void (^)(ToastGamebaseProductsResponse * _Nullable response, NSError * _Nullable error))completionHandler;
 
-+ (void)requestConsumablePurchasesForStore:(NSString *)store
+#pragma mark - consumable
++ (void)requestConsumablePurchasesForStore:(ToastGamebaseStoreCode)store
                      withCompletionHandler:(nullable void (^)(NSArray<ToastGamebasePurchase *> * _Nullable purchases, NSError * _Nullable error))completionHandler;
 
-+ (void)purchaseForStore:(NSString *)store
+#pragma mark - purchase
++ (void)purchaseForStore:(ToastGamebaseStoreCode)store
                  product:(ToastGamebaseProduct *)product
    withCompletionHandler:(ToastGamebasePurchaseHandler)completionHandler;
 
-+ (void)purchaseForStore:(NSString *)store
-               productID:(NSString *)productID
++ (void)purchaseForStore:(ToastGamebaseStoreCode)store
+               productID:(NSString *)productID 
    withCompletionHandler:(ToastGamebasePurchaseHandler)completionHandler;
 
-//ToastIAP only
-+ (void)restoreForStore:(NSString *)store
+#pragma mark - purchase - payload (payload is ToastIAP only)
++ (void)purchaseForStore:(ToastGamebaseStoreCode)store
+               productID:(NSString *)productID
+                 payload:(nullable NSString *)payload
+   withCompletionHandler:(ToastGamebasePurchaseHandler)completionHandler;
+
++ (void)purchaseForStore:(ToastGamebaseStoreCode)store
+                 product:(ToastGamebaseProduct *)product
+                 payload:(nullable NSString *)payload
+   withCompletionHandler:(ToastGamebasePurchaseHandler)completionHandler;
+
+#pragma mark - purchase - payload, extra (payload(gamebasePayload) is ToastIAP only)
++ (void)purchaseForStore:(ToastGamebaseStoreCode)store
+               productID:(NSString *)productID
+                 payload:(nullable NSString *)payload
+         gamebasePaylaod:(nullable NSString *)gamebasePayload
+   withCompletionHandler:(ToastGamebasePurchaseHandler)completionHandler;
+
++ (void)purchaseForStore:(ToastGamebaseStoreCode)store
+                 product:(ToastGamebaseProduct *)product
+                 payload:(nullable NSString *)payload
+         gamebasePaylaod:(nullable NSString *)gamebasePayload
+   withCompletionHandler:(ToastGamebasePurchaseHandler)completionHandler;
+
+#pragma mark - restore (ToastIAP Only)
++ (void)restoreForStore:(ToastGamebaseStoreCode)store
   withCompletionHandler:(nullable void (^)(NSArray<ToastGamebasePurchase *> * _Nullable purchases, NSError * _Nullable error))completionHandler;
 
-+ (void)requestActivatedPurchasesForStore:(NSString *)store
+#pragma mark - activatedPurchase (ToastIAP Only)
++ (void)requestActivatedPurchasesForStore:(ToastGamebaseStoreCode)store
                     withCompletionHandler:(nullable void (^)(NSArray<ToastGamebasePurchase *> * _Nullable purchases, NSError * _Nullable error))completionHandler;
 
-//ToastIAP only && TCIAPurchase Migration
-+ (void)processesIncompletePurchasesForStore:(NSString *)store
+#pragma mark - processes incomplete purchases  (ToastIAP Only - TCIAP -> ToastIAP)
++ (void)processesIncompletePurchasesForStore:(ToastGamebaseStoreCode)store
                        withCompletionHandler:(nullable void (^)(NSArray <ToastGamebasePurchase *> * _Nullable results, NSError * _Nullable error))completionHandler;
 
-// Supprot Util
-+ (void)consumeForStore:(NSString *)store
+#pragma mark - Support Utils
++ (void)consumeForStore:(ToastGamebaseStoreCode)store
                purchase:(ToastGamebasePurchase *)purchase
   withCompletionHandler:(nullable void (^)(NSError * _Nullable error))completionHandler;
 

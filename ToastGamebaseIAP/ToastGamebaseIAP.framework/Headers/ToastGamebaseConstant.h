@@ -33,8 +33,9 @@ typedef NS_ENUM(NSInteger, ToastGamebaseIAPErrorCode) {
 };
 
 //StoreCode
-extern NSString *const ToastGamebaseStoreAppStore;
-extern NSString *const ToastGamebaseStoreOngate;
+typedef NSString *ToastGamebaseStoreCode NS_STRING_ENUM;
+extern ToastGamebaseStoreCode const ToastGamebaseStoreCodeAppStore;
+extern ToastGamebaseStoreCode const ToastGamebaseStoreCodeOngate;
 
 //Error
 extern NSString *const ToastGamebaseIAPErrorDomain;
