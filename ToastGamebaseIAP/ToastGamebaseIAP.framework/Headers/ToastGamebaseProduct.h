@@ -17,7 +17,7 @@ NS_ASSUME_NONNULL_BEGIN
     NSString *_storeCode;
     ToastGamebaseProductType _productType;
     NSString *_productID;
-    NSInteger _productSeq;
+    NSString *_productSequence;
     NSString *_productName;
     NSDecimalNumber *_price;
     NSString *_currency;
@@ -28,7 +28,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, readonly, copy) NSString *storeCode;
 @property (nonatomic, readonly) ToastGamebaseProductType productType;
 @property (nonatomic, readonly, copy) NSString *productID;
-@property (nonatomic, readonly) NSInteger productSeq;
+@property (nonatomic, readonly) NSString *productSequence;
 @property (nonatomic, readonly, copy, nullable) NSString *productName;
 @property (nonatomic, readonly, copy, nullable) NSDecimalNumber *price;
 @property (nonatomic, readonly, copy, nullable) NSString *currency;
