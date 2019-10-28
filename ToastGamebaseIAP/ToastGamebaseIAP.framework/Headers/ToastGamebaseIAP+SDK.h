@@ -1,5 +1,5 @@
 //
-//  ToastGAmebaseIAP+SDK.h
+//  ToastGamebaseIAP+SDK.h
 //  ToastGamebaseIAP
 //
 //  Created by Hyup on 16/04/2019.
@@ -7,11 +7,6 @@
 //
 
 #import <Foundation/Foundation.h>
-
-#ifdef REFLECTION_ONGATE
-#else
-#import <ToastOngate/ToastOngate.h>
-#endif
 
 #import "ToastGamebaseIAPConfiguration.h"
 #import "ToastGamebaseProduct.h"
