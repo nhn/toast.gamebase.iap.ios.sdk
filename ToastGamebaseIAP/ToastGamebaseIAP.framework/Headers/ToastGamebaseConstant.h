@@ -20,23 +20,6 @@ extern ToastGamebaseProductType const ToastGamebaseProductTypeConsumable;
 extern ToastGamebaseProductType const ToastGamebaseProductTypeAutoRenewableSubscription;
 extern ToastGamebaseProductType const ToastGamebaseProductTypeConsumableSubscription;
 
-typedef NS_ENUM(NSInteger, ToastGamebaseIAPErrorCode) {
-    
-    //ToastGamebase Error Code
-    ToastGamebaseIAPErrorCodeStoreNotMatched         = 10001,
-    
-    ToastGamebaseIAPErrorCodeNotSupportedMethod      = 10008,
-    ToastGamebaseIAPErrorCodeNotImportedFramework    = 10009,
-    
-    //ToastGamebase Ongate Only Code
-    ToastGamebaseIAPErrorOngateCashInsufficient      = 60001,
-};
-
-//StoreCode
-typedef NSString *ToastGamebaseStoreCode NS_STRING_ENUM;
-extern ToastGamebaseStoreCode const ToastGamebaseStoreCodeAppStore;
-extern ToastGamebaseStoreCode const ToastGamebaseStoreCodeOngate;
-
 //Error
 extern NSString *const ToastGamebaseIAPErrorDomain;
 

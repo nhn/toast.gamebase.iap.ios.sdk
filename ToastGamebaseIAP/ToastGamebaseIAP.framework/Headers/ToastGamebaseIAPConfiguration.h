@@ -16,8 +16,6 @@ NS_ASSUME_NONNULL_BEGIN
 + (instancetype)configurationWithAppKey:(NSString *)appKey
                             serviceZone:(ToastGamebaseServiceZone)serviceZone;
 
-- (void)setExtraObject:(NSDictionary *)object forStore:(NSString *)store;
-
 @end
 
 NS_ASSUME_NONNULL_END
