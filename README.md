@@ -3,7 +3,7 @@
 ## ToastGamebaseIAP의 구성
 
 * ToastGamebaseIAP
-    * [ToastIAP] ToastIAP.framework (0.19.3 ~) `필수`
+    * [ToastIAP] ToastIAP.framework (0.27.0 ~) `필수`
         * [ToastCore] ToastCore.framework
             * [ToastCommon] ToastCommon.framework
 
@@ -21,11 +21,11 @@
 Podfile을 생성하여 TOAST SDK에 대한 Pod을 추가합니다.
 
 ``` podspec
-platform :ios, '8.0'
+platform :ios, '9.0'
 use_frameworks!
 
 target '{YOUR PROJECT TARGET NAME}' do
-    pod 'ToastGamebaseIAP', '0.10.0'
+    pod 'ToastGamebaseIAP', '0.11.0'
     pod 'ToastIAP'    
 end
 ```
@@ -130,7 +130,10 @@ ToastGamebaseIAPConfiguration *configuration = [ToastGamebaseIAPConfiguration co
 #### Delegate
 
 * SDK를 통해 요청한 결제가 아닐 경우 Delegate를 통해 결과가 전달 됩니다.
-* Promotion (AppStore Purchase)
+    * Promotion (AppStore Purchase)
+* 프로모션 결제의 진행여부 결정에 대한 통지를 받을 수 있습니다.
+    * 프로모션 결제를 SDK에서 진행할지 사용자가 원하는 시점에 직접 결제를 요청할지 결정 할 수 있습니다.
+    * Optional Delegate 이며 Delegate를 구현하지 않았을 경우 기본값은 return YES 입니다.
 
 ##### API 명세
 
@@ -138,9 +141,12 @@ ToastGamebaseIAPConfiguration *configuration = [ToastGamebaseIAPConfiguration co
 @protocol ToastGamebaseInAppPurchaseDelegate <NSObject>
 
 - (void)didReceivePurchaseResult:(ToastGamebasePurchase *_Nullable)purchase
-                       isSuccess:(BOOL)isSuccess                                
+                       isSuccess:(BOOL)isSuccess
                        productID:(NSString * _Nonnull)productID
                            error:(NSError *_Nullable)error;
+
+@optional
+- (BOOL)shouldAddStorePurchaseForProduct:(ToastGamebaseProduct *_Nullable)product API_AVAILABLE(ios(11.0));
 
 @end
 ```
@@ -160,6 +166,25 @@ ToastGamebaseIAPConfiguration *configuration = [ToastGamebaseIAPConfiguration co
         NSLog(@"Fail ProductID : %@", productID);
         NSLog(@"Fail Error : %@", error);
     }
+}
+
+// 프로모션 결제 진행 방법 선택
+- (BOOL)shouldAddStorePurchaseForProduct:(ToastGamebaseProduct *)product {
+    /*
+    * return YES; 
+        * 요청한 프로모션 결제를 SDK에서 수행하도록 합니다. 
+        * 초기화 및 로그인 후 결제창이 출력됩니다. 
+        * Delegate를 구현하지 않았을 경우 return YES로 동작합니다.
+    */ 
+    return YES;
+
+    /*
+    * return NO;
+        * 프로모션 결제가 종료됩니다. 
+        * product 객체를 저장한뒤 이후 원하는 시점에 저장된 객체로 결제를 진행 할 수 있습니다.        
+    */
+    self.promotionProduct = product;
+    return NO;     
 }
 ```
 
