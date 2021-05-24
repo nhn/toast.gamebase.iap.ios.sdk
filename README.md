@@ -3,7 +3,7 @@
 ## ToastGamebaseIAP의 구성
 
 * ToastGamebaseIAP
-    * [ToastIAP] ToastIAP.framework (0.27.0 ~) `필수`
+    * [ToastIAP] ToastIAP.framework (0.28.0 ~) `필수`
         * [ToastCore] ToastCore.framework
             * [ToastCommon] ToastCommon.framework
 
@@ -25,7 +25,7 @@ platform :ios, '9.0'
 use_frameworks!
 
 target '{YOUR PROJECT TARGET NAME}' do
-    pod 'ToastGamebaseIAP', '0.11.0'
+    pod 'ToastGamebaseIAP', '0.12.0'
     pod 'ToastIAP'    
 end
 ```

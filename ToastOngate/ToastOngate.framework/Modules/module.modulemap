@@ -1,6 +1,0 @@
-framework module ToastOngate {
-  umbrella header "ToastOngate.h"
-
-  export *
-  module * { export * }
-}
