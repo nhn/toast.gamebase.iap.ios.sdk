@@ -3,7 +3,7 @@
 ## ToastGamebaseIAP의 구성
 
 * ToastGamebaseIAP
-    * [ToastIAP] ToastIAP.framework (0.28.0 ~) `필수`
+    * [ToastIAP] ToastIAP.framework (0.30.0 ~) `필수`
         * [ToastCore] ToastCore.framework
             * [ToastCommon] ToastCommon.framework
 

@@ -23,7 +23,8 @@ NS_ASSUME_NONNULL_BEGIN
     NSString *_paymentSequence;
     NSString *_accessToken;
     NSString *_userID;
-    BOOL _storePayment;    
+    BOOL _storePayment;
+    BOOL _sandboxPayment;    
     NSTimeInterval _purchaseTime;
     NSTimeInterval _expiryTime;
     NSString *_paymentID;
@@ -43,6 +44,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, readonly, copy) NSString *accessToken;
 @property (nonatomic, readonly, copy) NSString *userID;
 @property (nonatomic, readonly, getter=isStorePayment) BOOL storePayment;
+@property (nonatomic, readonly, getter=isSandboxPayment) BOOL sandboxPayment;
 @property (nonatomic, readonly) NSTimeInterval purchaseTime;
 @property (nonatomic, readonly) NSTimeInterval expiryTime;
 @property (nonatomic, readonly, copy, nullable) NSString *paymentID;
