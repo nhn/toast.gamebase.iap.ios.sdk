@@ -3,15 +3,15 @@
 ## ToastGamebaseIAP의 구성
 
 * ToastGamebaseIAP
-    * [ToastIAP] ToastIAP.framework (0.30.0 ~) `필수`
-        * [ToastCore] ToastCore.framework
-            * [ToastCommon] ToastCommon.framework
+    * [NHNCloudIAP] NHNCloudIAP.framework (0.30.0 ~) `필수`
+        * [NHNCloudCore] NHNCloudCore.framework
+            * [NHNCloudCommon] NHNCloudCommon.framework
 
 
 | SDK | Cocoapods Pod Name | Framework | Dependency | Etc |
 | --- | ------------------ | --------- | ---------- | --- |
-| TOAST Gamebase IAP SDK | ToastGamebaseIAP | ToastGamebaseIAP.framework | ToastIAP | OTHER_LDFLAGS = ("-ObjC"); |
-| TOAST IAP SDK | ToastIAP | ToastIAP.framework | ToastCore<br>ToastCommon | OTHER_LDFLAGS = ("-ObjC","-lc++" ); |
+| TOAST Gamebase IAP SDK | ToastGamebaseIAP | ToastGamebaseIAP.framework | NHNCloudIAP | OTHER_LDFLAGS = ("-ObjC"); |
+| NHNCloud IAP SDK | NHNCloudIAP | NHNCloudIAP.framework | NHNCloudCore<br>NHNCloudCommon | OTHER_LDFLAGS = ("-ObjC","-lc++" ); |
 
 
 ## TOAST SDK를 Xcode 프로젝트에 적용
@@ -25,8 +25,8 @@ platform :ios, '9.0'
 use_frameworks!
 
 target '{YOUR PROJECT TARGET NAME}' do
-    pod 'ToastGamebaseIAP', '0.12.0'
-    pod 'ToastIAP'    
+    pod 'ToastGamebaseIAP', '0.14.0'
+    pod 'NHNCloudIAP'    
 end
 ```
 
@@ -44,15 +44,15 @@ end
 
 ``` objc
 #import <ToastGamebaseIAP/ToastGamebaseIAP.h>
-#import <ToastCore/ToastCore.h>
-#import <ToastIAP/ToastIAP.h>
+#import <NHNCloudCore/NHNCloudCore.h>
+#import <NHNCloudIAP/NHNCloudIAP.h>
 ```
 
 ## API 사용 가이드
 
 ## 서비스 로그인
 
-* TOAST SDK에서 제공하는 모든 상품(IAP, Log & Crash, Push등)은 같은 사용자 ID 하나만 사용합니다.
+* NHNCloud SDK에서 제공하는 모든 상품(IAP, Log & Crash, Push등)은 같은 사용자 ID 하나만 사용합니다.
 
 ### 로그인
 
@@ -60,14 +60,14 @@ end
 
 ``` objc
 // 서비스 로그인 완료 후 사용자 ID 설정
-[ToastSDK setUserID:@"INPUT_USER_ID"];
+[NHNCloudSDK setUserID:@"INPUT_USER_ID"];
 ```
 
 ### 로그아웃
 
 ``` objc
 // 서비스 로그아웃 완료 후 사용자 ID를 nil로 설정
-[ToastSDK setUserID:nil];
+[NHNCloudSDK setUserID:nil];
 ```
 
 ### 초기화
@@ -145,7 +145,6 @@ ToastGamebaseIAPConfiguration *configuration = [ToastGamebaseIAPConfiguration co
                        productID:(NSString * _Nonnull)productID
                            error:(NSError *_Nullable)error;
 
-@optional
 - (BOOL)shouldAddStorePurchaseForProduct:(ToastGamebaseProduct *_Nullable)product API_AVAILABLE(ios(11.0));
 
 @end
@@ -443,4 +442,4 @@ typedef void (^ToastGamebasePurchaseHandler)(BOOL isSuccess,
 
 ### Error Code
 
-* ToastGamebaseIAP 의 ErrorCode는 ToastIAP의 ErrorCode와 동일한 Code를 사용합니다.
+* ToastGamebaseIAP 의 ErrorCode는 NHNCloudIAP의 ErrorCode와 동일한 Code를 사용합니다.
