@@ -145,6 +145,7 @@ ToastGamebaseIAPConfiguration *configuration = [ToastGamebaseIAPConfiguration co
                        productID:(NSString * _Nonnull)productID
                            error:(NSError *_Nullable)error;
 
+@optional
 - (BOOL)shouldAddStorePurchaseForProduct:(ToastGamebaseProduct *_Nullable)product API_AVAILABLE(ios(11.0));
 
 @end
