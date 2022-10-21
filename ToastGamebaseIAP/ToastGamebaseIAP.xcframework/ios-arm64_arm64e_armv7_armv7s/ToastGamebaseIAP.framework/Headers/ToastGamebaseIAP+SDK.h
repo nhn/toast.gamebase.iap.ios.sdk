@@ -50,6 +50,8 @@ NS_ASSUME_NONNULL_BEGIN
 #pragma mark - consumable
 + (void)requestConsumablePurchasesWithCompletionHandler:(nullable void (^)(NSArray<ToastGamebasePurchase *> * _Nullable purchases, NSError * _Nullable error))completionHandler;
 
++ (void)requestAllMarketsConsumablePurchasesWithCompletionHandler:(nullable void (^)(NSArray<ToastGamebasePurchase *> * _Nullable purchases, NSError * _Nullable error))completionHandler;
+
 #pragma mark - purchase
 + (void)purchaseWithProduct:(ToastGamebaseProduct *)product completionHandler:(ToastGamebasePurchaseHandler)completionHandler;
 
@@ -79,7 +81,11 @@ NS_ASSUME_NONNULL_BEGIN
 + (void)restoreWithCompletionHandler:(nullable void (^)(NSArray<ToastGamebasePurchase *> * _Nullable purchases, NSError * _Nullable error))completionHandler;
 
 #pragma mark - activatedPurchase (ToastIAP Only)
-+ (void)requestActivatedPurchasesWithCompletionHandler:(nullable void (^)(NSArray<ToastGamebasePurchase *> * _Nullable purchases, NSError * _Nullable error))completionHandler;
++ (void)requestActivatedPurchasesWithCompletionHandler:(nullable void (^)(NSArray<ToastGamebasePurchase *> * _Nullable purchases, NSError * _Nullable error))completionHandler __deprecated_msg("use requestActiveSubscriptionsWithCompletionHandler: instead.");;
+
++ (void)requestActiveSubscriptionsWithCompletionHandler:(nullable void (^)(NSArray<ToastGamebasePurchase *> * _Nullable purchases, NSError * _Nullable error))completionHandler;
+
++ (void)requestAllMarketsActiveSubscriptionsWithCompletionHandler:(nullable void (^)(NSArray<ToastGamebasePurchase *> * _Nullable purchases, NSError * _Nullable error))completionHandler;
 
 #pragma mark - processes incomplete purchases  (ToastIAP Only - TCIAP -> ToastIAP)
 + (void)processesIncompletePurchasesWithCompletionHandler:(nullable void (^)(NSArray <ToastGamebasePurchase *> * _Nullable results, NSError * _Nullable error))completionHandler;

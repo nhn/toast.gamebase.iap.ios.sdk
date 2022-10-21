@@ -3,7 +3,7 @@
 ## ToastGamebaseIAP의 구성
 
 * ToastGamebaseIAP
-    * [NHNCloudIAP] NHNCloudIAP.framework (0.30.0 ~) `필수`
+    * [NHNCloudIAP] NHNCloudIAP.framework (1.1.0 ~) `필수`
         * [NHNCloudCore] NHNCloudCore.framework
             * [NHNCloudCommon] NHNCloudCommon.framework
 
@@ -25,7 +25,7 @@ platform :ios, '9.0'
 use_frameworks!
 
 target '{YOUR PROJECT TARGET NAME}' do
-    pod 'ToastGamebaseIAP', '0.14.0'
+    pod 'ToastGamebaseIAP', '0.15.0'
     pod 'NHNCloudIAP'    
 end
 ```
@@ -333,13 +333,17 @@ typedef void (^ToastGamebasePurchaseHandler)(BOOL isSuccess,
 ##### API 명세
 
 ``` objc
-+ (void)requestActivatedPurchasesWithCompletionHandler:(nullable void (^)(NSArray<ToastGamebasePurchase *> * _Nullable purchases, NSError * _Nullable error))completionHandler;
+// 앱스토어 구독 상품 조회
++ (void)requestActiveSubscriptionsWithCompletionHandler:(nullable void (^)(NSArray<ToastGamebasePurchase *> * _Nullable purchases, NSError * _Nullable error))completionHandler;
+
+// 모든 스토어 구독 상품 조회
++ (void)requestAllMarketsActiveSubscriptionsWithCompletionHandler:(nullable void (^)(NSArray<ToastGamebasePurchase *> * _Nullable purchases, NSError * _Nullable error))completionHandler;
 ```
 
 ##### API 사용 예
 
 ``` objc
-[ToastGamebaseIAP requestActivatedPurchasesWithCompletionHandler:^(NSArray<ToastGamebasePurchase *> * _Nullable purchases, NSError * _Nullable error) {
+[ToastGamebaseIAP requestActiveSubscriptionsWithCompletionHandler:^(NSArray<ToastGamebasePurchase *> * _Nullable purchases, NSError * _Nullable error) {
 
     if(error == nil) {
         NSLog(@"requestActivatedPurchases : %@", purchases);
@@ -384,7 +388,11 @@ typedef void (^ToastGamebasePurchaseHandler)(BOOL isSuccess,
 ##### API 명세
 
 ``` objc
+// 앱스토어 구매 미소비 내역 조회
 + (void)requestConsumablePurchasesWithCompletionHandler:(nullable void (^)(NSArray<ToastGamebasePurchase *> * _Nullable purchases, NSError * _Nullable error))completionHandler;
+
+// 모든 스토어 구매 미소비 내역 조회
++ (void)requestAllMarketsConsumablePurchasesWithCompletionHandler:(nullable void (^)(NSArray<ToastGamebasePurchase *> * _Nullable purchases, NSError * _Nullable error))completionHandler;
 ```
 
 ##### API 사용 예
